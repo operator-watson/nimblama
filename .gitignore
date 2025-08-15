@@ -1,0 +1,40 @@
+# Build directories
+build/
+cmake-build-*/
+out/
+bin/
+lib/
+
+# CMake generated files
+CMakeCache.txt
+CMakeFiles/
+Makefile
+cmake_install.cmake
+install_manifest.txt
+compile_commands.json
+
+# Compiled objects
+*.o
+*.obj
+*.lo
+*.la
+*.a
+*.lib
+*.so
+*.dylib
+*.dll
+*.exe
+*.out
+*.app
+
+# Logs & temp
+*.log
+*.tmp
+*.swp
+
+# IDE metadata
+.vscode/
+.idea/
+
+# LLM model storage
+models/
