@@ -33,10 +33,16 @@ set(LLAMA_FORCE_CUBLAS ${GGML_CUDA_FORCE_CUBLAS} CACHE BOOL "Force cuBLAS kernel
 add_subdirectory(extern/llama.cpp llama-build EXCLUDE_FROM_ALL)
 
 # ---- Your executable ----
-add_executable(nimblama src/main.cpp)
+add_executable(nimblama
+src/main.cpp
+src/llm/llama_chat_app.cpp
+)
 
 # Include llama.cpp headers
-target_include_directories(nimblama PRIVATE extern/llama.cpp)
+target_include_directories(nimblama PRIVATE
+    extern/llama.cpp
+    src/llm
+    )
 
 # Pass CUDA macros to your code for print_cuda_status()
 if (USE_CUDA_DEFINES)
