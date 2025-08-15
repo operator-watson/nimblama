@@ -24,21 +24,21 @@ Clone the repository:
 ```bash
 git clone <your-repo-url>
 cd <repo-folder>
-
+```
 Build using CMake
 
 ```bash
 mkdir build
 cd build
 cmake ..
-make
-
+ninja
+```
 Optional: run with Docker
 
 ```bash
 docker build -t solo-llm .
 docker run --gpus all -it solo-llm
-
+```
 ## Usage
 Intended as a personal experimentation sandbox. Use the code to load models, run inference, and test learning approaches. No public support or guarantees.
 
