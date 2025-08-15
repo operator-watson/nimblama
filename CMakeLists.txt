@@ -35,7 +35,7 @@ add_subdirectory(extern/llama.cpp llama-build EXCLUDE_FROM_ALL)
 # ---- Your executable ----
 add_executable(nimblama
 src/main.cpp
-src/llm/llama_chat_app.cpp
+src/llm/llama_wrapper.cpp
 )
 
 # Include llama.cpp headers

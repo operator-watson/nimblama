@@ -1,5 +1,5 @@
-// ===== llama_chat_app.cpp =====
-#include "llama_chat_app.hpp"
+// ===== llama_wrapper.cpp =====
+#include "llama_wrapper.hpp"
 #include <cstdio>
 #include <cstring>
 #include <iostream>
@@ -11,29 +11,29 @@ ModelConfig::ModelConfig(const std::string &path) : modelPath(path)
 }
 
 // Constructor
-LlamaChatApp::LlamaChatApp(const std::string &modelPath)
+LlamaWrapper::LlamaWrapper(const std::string &modelPath)
     : model(nullptr), ctx(nullptr), vocab(nullptr), sampler(nullptr),
       modelConfig(modelPath), isInitialized(false) {}
 
 // Destructor
-LlamaChatApp::~LlamaChatApp()
+LlamaWrapper::~LlamaWrapper()
 {
   cleanup();
 }
 
 // Configuration methods
-void LlamaChatApp::setSamplingConfig(const SamplingConfig &config)
+void LlamaWrapper::setSamplingConfig(const SamplingConfig &config)
 {
   samplingConfig = config;
 }
 
-void LlamaChatApp::setModelConfig(const ModelConfig &config)
+void LlamaWrapper::setModelConfig(const ModelConfig &config)
 {
   modelConfig = config;
 }
 
 // Initialize the model, context, and sampler
-bool LlamaChatApp::initialize()
+bool LlamaWrapper::initialize()
 {
   if (isInitialized)
   {
@@ -60,7 +60,7 @@ bool LlamaChatApp::initialize()
 }
 
 // Main chat loop
-void LlamaChatApp::runChatLoop()
+void LlamaWrapper::runChatLoop()
 {
   if (!isInitialized)
   {
@@ -89,7 +89,7 @@ void LlamaChatApp::runChatLoop()
 }
 
 // Process a single user message and return response
-std::string LlamaChatApp::processUserMessage(const std::string &userMessage)
+std::string LlamaWrapper::processUserMessage(const std::string &userMessage)
 {
   if (!isInitialized)
   {
@@ -114,13 +114,13 @@ std::string LlamaChatApp::processUserMessage(const std::string &userMessage)
 }
 
 // Get current message history
-const std::vector<llama_chat_message> &LlamaChatApp::getMessageHistory() const
+const std::vector<llama_chat_message> &LlamaWrapper::getMessageHistory() const
 {
   return messageHistory;
 }
 
 // Clear message history (keeps system message)
-void LlamaChatApp::clearHistory()
+void LlamaWrapper::clearHistory()
 {
   for (size_t i = 1; i < messageHistory.size(); ++i)
   {
@@ -134,7 +134,7 @@ void LlamaChatApp::clearHistory()
 }
 
 // Print CUDA availability status
-void LlamaChatApp::printCudaStatus()
+void LlamaWrapper::printCudaStatus()
 {
 #ifdef GGML_USE_CUBLAS
   std::cout << "CUDA is ENABLED (GGML_USE_CUBLAS)." << std::endl;
@@ -146,7 +146,7 @@ void LlamaChatApp::printCudaStatus()
 }
 
 // Initialize logging to only show errors
-bool LlamaChatApp::initializeLogging()
+bool LlamaWrapper::initializeLogging()
 {
   llama_log_set([](enum ggml_log_level level, const char *text, void * /* user_data */)
                 {
@@ -157,14 +157,14 @@ bool LlamaChatApp::initializeLogging()
 }
 
 // Load all available backends
-bool LlamaChatApp::loadBackends()
+bool LlamaWrapper::loadBackends()
 {
   ggml_backend_load_all();
   return true;
 }
 
 // Load the model from file
-bool LlamaChatApp::loadModel()
+bool LlamaWrapper::loadModel()
 {
   llama_model_params modelParams = llama_model_default_params();
   modelParams.n_gpu_layers = modelConfig.nGpuLayers;
@@ -181,7 +181,7 @@ bool LlamaChatApp::loadModel()
 }
 
 // Create inference context
-bool LlamaChatApp::createContext()
+bool LlamaWrapper::createContext()
 {
   llama_context_params ctxParams = llama_context_default_params();
   ctxParams.n_ctx = modelConfig.nCtx;
@@ -200,7 +200,7 @@ bool LlamaChatApp::createContext()
 }
 
 // Setup the sampling chain
-bool LlamaChatApp::setupSampler()
+bool LlamaWrapper::setupSampler()
 {
   sampler = llama_sampler_chain_init(llama_sampler_chain_default_params());
 
@@ -222,7 +222,7 @@ bool LlamaChatApp::setupSampler()
 }
 
 // Setup initial system message
-bool LlamaChatApp::setupSystemMessage()
+bool LlamaWrapper::setupSystemMessage()
 {
   messageHistory.push_back({"system",
                             strdup("You are an AI assistant created by Operator Watson.\n\n"
@@ -243,7 +243,7 @@ bool LlamaChatApp::setupSystemMessage()
 }
 
 // Build prompt from current message history
-std::string LlamaChatApp::buildPromptFromHistory()
+std::string LlamaWrapper::buildPromptFromHistory()
 {
   const char *tmpl = llama_model_chat_template(model, nullptr);
 
@@ -269,7 +269,7 @@ std::string LlamaChatApp::buildPromptFromHistory()
 }
 
 // Core generation function
-std::string LlamaChatApp::generateResponse(const std::string &prompt)
+std::string LlamaWrapper::generateResponse(const std::string &prompt)
 {
   std::string response;
 
@@ -341,7 +341,7 @@ std::string LlamaChatApp::generateResponse(const std::string &prompt)
 }
 
 // Cleanup all allocated resources
-void LlamaChatApp::cleanup()
+void LlamaWrapper::cleanup()
 {
   // Free message history
   for (auto &msg : messageHistory)

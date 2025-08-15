@@ -1,4 +1,4 @@
-// ===== llama_chat_app.h =====
+// ===== llama_wrapper.h =====
 #pragma once
 
 #include "llama.h"
@@ -29,7 +29,7 @@ struct ModelConfig
 };
 
 // Main chat application class
-class LlamaChatApp
+class LlamaWrapper
 {
 private:
   llama_model *model;
@@ -46,8 +46,8 @@ private:
   bool isInitialized;
 
 public:
-  explicit LlamaChatApp(const std::string &modelPath);
-  ~LlamaChatApp();
+  explicit LlamaWrapper(const std::string &modelPath);
+  ~LlamaWrapper();
 
   // Configuration methods
   void setSamplingConfig(const SamplingConfig &config);
