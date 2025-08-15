@@ -30,14 +30,18 @@ Build using CMake
 ```bash
 mkdir build
 cd build
-cmake ..
-ninja
+cmake -S .. -B . -G Ninja -DCMAKE_BUILD_TYPE=Release \
+      -DCMAKE_C_COMPILER_LAUNCHER=ccache \
+      -DCMAKE_CXX_COMPILER_LAUNCHER=ccache \
+      -DGGML_CUDA=ON \
+      -DGGML_CUDA_FORCE_CUBLAS=ON
+ninja -v
 ```
 Optional: run with Docker
 
 ```bash
-docker build -t solo-llm .
-docker run --gpus all -it solo-llm
+docker build -t nimblama .
+docker run --gpus all -it nimblama
 ```
 ## Usage
 Intended as a personal experimentation sandbox. Use the code to load models, run inference, and test learning approaches. No public support or guarantees.
