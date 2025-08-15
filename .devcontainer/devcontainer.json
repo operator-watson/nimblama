@@ -1,0 +1,43 @@
+{
+  "name": "nimblama (CUDA)",
+  "build": {
+    "dockerfile": "../Dockerfile",
+    "context": "."
+  },
+  "runArgs": [
+    "--gpus",
+    "all"
+  ],
+  "mounts": [
+    "source=${localWorkspaceFolder}/src,target=/workspaces/nimblama/src,type=bind,consistency=cached",
+    "source=${localWorkspaceFolder}/models,target=/workspaces/nimblama/models,type=bind,consistency=cached",
+    "source=${env:HOME}/.ccache,target=/home/vscode/.ccache,type=bind",
+    "source=${env:SSH_AUTH_SOCK},target=/ssh-agent,type=bind"
+  ],
+  "containerEnv": {
+    "NVIDIA_VISIBLE_DEVICES": "all",
+    "NVIDIA_DRIVER_CAPABILITIES": "compute,utility",
+    "SSH_AUTH_SOCK": "/ssh-agent"
+  },
+  "remoteUser": "vscode",
+  "workspaceFolder": "/workspaces/nimblama",
+  "customizations": {
+    "vscode": {
+      "extensions": [
+        "ms-vscode.cpptools",
+        "ms-vscode.cmake-tools"
+      ],
+      "settings": {
+        "cmake.generator": "Ninja",
+        "cmake.configureOnOpen": true,
+        "editor.rulers": [
+          100
+        ],
+        "files.associations": {
+          "CMakeLists.txt": "cmake"
+        }
+      }
+    }
+  },
+  "postCreateCommand": "cmake -S . -B build -G Ninja -DCMAKE_BUILD_TYPE=Release -DCMAKE_C_COMPILER_LAUNCHER=ccache -DCMAKE_CXX_COMPILER_LAUNCHER=ccache -DGGML_CUDA=ON -DGGML_CUDA_FORCE_CUBLAS=ON && cmake --build build -j"
+}
