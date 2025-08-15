@@ -1,4 +1,4 @@
-# Solo LLM Framework
+# Nimblama
 
 A personal, homebrew C++ project exploring LLM frameworks using llama.cpp, CUDA, Docker, and CMake. Built as a solo learning project—not intended for public use.
 
