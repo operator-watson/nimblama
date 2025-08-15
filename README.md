@@ -22,8 +22,8 @@ Goal: personal learning, experimenting with model loading, inference pipelines, 
 Clone the repository:
 
 ```bash
-git clone <your-repo-url>
-cd <repo-folder>
+git clone https://github.com/operator-watson/nimblama.git
+cd nimblama
 ```
 Build using CMake
 
