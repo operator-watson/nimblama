@@ -4,7 +4,7 @@
 int main(int argc, char **argv)
 {
   // Create chat application instance
-  LlamaWrapper lw("models/Deep-Reasoning-Llama-3.2-Instruct-uncensored-3B.Q8_0.gguf");
+  LlamaWrapper lw("models/L3.1-DpHermes-Rsnng-8B-DarkIdol-Inst-1.2-Uncen-D_AU-Q4_k_m.gguf");
 
   // Optional: customize configuration
   SamplingConfig samplingConfig;
@@ -13,9 +13,9 @@ int main(int argc, char **argv)
   samplingConfig.topK = 80;
   lw.setSamplingConfig(samplingConfig);
 
-  ModelConfig modelConfig("models/Deep-Reasoning-Llama-3.2-Instruct-uncensored-3B.f16.gguf");
-  modelConfig.nCtx = 24576;
-  modelConfig.nBatch = 2048;
+  ModelConfig modelConfig("models/L3.1-DpHermes-Rsnng-8B-DarkIdol-Inst-1.2-Uncen-D_AU-Q4_k_m.gguf");
+  modelConfig.nCtx = 16384;
+  modelConfig.nBatch = 512;
   lw.setModelConfig(modelConfig);
 
   // Initialize everything
