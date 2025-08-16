@@ -25,7 +25,14 @@
     "vscode": {
       "extensions": [
         "ms-vscode.cpptools",
-        "ms-vscode.cmake-tools"
+        "ms-vscode.cmake-tools",
+        "streetsidesoftware.code-spell-checker",
+        "vadimcn.vscode-lldb",
+        "donjayamanne.githistory",
+        "eamodio.gitlens",
+        "oderwat.indent-rainbow",
+        "ms-vscode.cpptools-extension-pack",
+        "ajshort.include-autocomplete"
       ],
       "settings": {
         "cmake.generator": "Ninja",
