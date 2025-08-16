@@ -58,6 +58,10 @@ public:
   void runChatLoop();
   std::string processUserMessage(const std::string &userMessage);
 
+  // NEW: File loading functionality
+  bool loadFileAsFirstMessage(const std::string &filePath);
+  std::string loadFileAsFirstMessageWithResponse(const std::string &filePath);
+
   // Utility methods
   const std::vector<llama_chat_message> &getMessageHistory() const;
   void clearHistory();
@@ -78,4 +82,7 @@ private:
 
   // Resource management
   void cleanup();
+
+  // NEW: File reading helper
+  std::string readFileContents(const std::string &filePath);
 };

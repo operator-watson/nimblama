@@ -6,7 +6,7 @@ ARG DEBIAN_FRONTEND=noninteractive
 RUN apt-get update && apt-get install -y --no-install-recommends \
   git build-essential cmake ninja-build pkg-config \
   python3 python3-pip curl ca-certificates \
-  openssh-client ccache \
+  openssh-client ccache gdb \
   && rm -rf /var/lib/apt/lists/*
 
 # VS Code remote user defaults

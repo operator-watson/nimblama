@@ -13,6 +13,11 @@ int main(int argc, char **argv)
   samplingConfig.topK = 80;
   lw.setSamplingConfig(samplingConfig);
 
+  ModelConfig modelConfig("models/Deep-Reasoning-Llama-3.2-Instruct-uncensored-3B.f16.gguf");
+  modelConfig.nCtx = 24576;
+  modelConfig.nBatch = 2048;
+  lw.setModelConfig(modelConfig);
+
   // Initialize everything
   if (!lw.initialize())
   {
@@ -20,8 +25,15 @@ int main(int argc, char **argv)
     return 1;
   }
 
-  // Run the interactive chat loop
-  lw.runChatLoop();
+  /*   // Run the interactive chat loop
+    lw.runChatLoop(); */
+
+  std::string response = lw.loadFileAsFirstMessageWithResponse("prompt.txt");
+  if (!response.empty())
+  {
+    // File was processed and response generated
+    lw.runChatLoop(); // Continue chatting about the file
+  }
 
   return 0;
 }
