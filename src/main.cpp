@@ -4,7 +4,7 @@
 int main(int argc, char **argv)
 {
   // Create chat application instance
-  LlamaWrapper lw("models/L3.1-DpHermes-Rsnng-8B-DarkIdol-Inst-1.2-Uncen-D_AU-Q4_k_m.gguf");
+  LlamaWrapper lw("models/l3.1-dark-reasoning-lewdplay-evo-hermes-r1-uncensored-8b-q4_k_m.gguf");
 
   // Optional: customize configuration
   SamplingConfig samplingConfig;
@@ -13,8 +13,10 @@ int main(int argc, char **argv)
   samplingConfig.topK = 80;
   lw.setSamplingConfig(samplingConfig);
 
-  ModelConfig modelConfig("models/L3.1-DpHermes-Rsnng-8B-DarkIdol-Inst-1.2-Uncen-D_AU-Q4_k_m.gguf");
-  modelConfig.nCtx = 16384;
+  ModelConfig modelConfig("models/l3.1-dark-reasoning-lewdplay-evo-hermes-r1-uncensored-8b-q4_k_m.gguf");
+  modelConfig.systemMessagePath = "system_message.txt";
+  modelConfig.nGpuLayers = 70;
+  modelConfig.nCtx = 8192;
   modelConfig.nBatch = 512;
   lw.setModelConfig(modelConfig);
 
@@ -25,15 +27,15 @@ int main(int argc, char **argv)
     return 1;
   }
 
-  /*   // Run the interactive chat loop
-    lw.runChatLoop(); */
+    // Run the interactive chat loop
+    lw.runChatLoop();
 
-  std::string response = lw.loadFileAsFirstMessageWithResponse("prompt.txt");
+/*   std::string response = lw.loadFileAsFirstMessageWithResponse("prompt.txt");
   if (!response.empty())
   {
     // File was processed and response generated
     lw.runChatLoop(); // Continue chatting about the file
-  }
+  } */
 
   return 0;
 }

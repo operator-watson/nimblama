@@ -21,6 +21,7 @@ struct SamplingConfig
 struct ModelConfig
 {
   std::string modelPath;
+  std::string systemMessagePath = "";
   int nGpuLayers = 100;
   int nCtx = 8192;
   int nBatch = 8192;
@@ -74,7 +75,7 @@ private:
   bool loadModel();
   bool createContext();
   bool setupSampler();
-  bool setupSystemMessage();
+  bool setupSystemMessage(const std::string &systemMessagePath = "");
 
   // Generation helpers
   std::string buildPromptFromHistory();
@@ -85,4 +86,5 @@ private:
 
   // NEW: File reading helper
   std::string readFileContents(const std::string &filePath);
+  std::string readSystemMessage(const std::string &filePath);
 };
