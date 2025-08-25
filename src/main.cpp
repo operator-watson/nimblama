@@ -15,9 +15,9 @@ int main(int argc, char **argv)
 
   ModelConfig modelConfig("models/l3.1-dark-reasoning-lewdplay-evo-hermes-r1-uncensored-8b-q4_k_m.gguf");
   modelConfig.systemMessagePath = "system_message.txt";
-  modelConfig.nGpuLayers = 70;
-  modelConfig.nCtx = 8192;
-  modelConfig.nBatch = 512;
+  modelConfig.nGpuLayers = 80;
+  modelConfig.nCtx = 12288;
+  modelConfig.nBatch = 2048;
   lw.setModelConfig(modelConfig);
 
   // Initialize everything

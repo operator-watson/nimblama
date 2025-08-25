@@ -6,7 +6,8 @@
   },
   "runArgs": [
     "--gpus",
-    "all"
+    "all",
+    "--runtime=nvidia"
   ],
   "mounts": [
     "source=${localWorkspaceFolder}/src,target=/workspaces/nimblama/src,type=bind,consistency=cached",
@@ -17,6 +18,7 @@
   "containerEnv": {
     "NVIDIA_VISIBLE_DEVICES": "all",
     "NVIDIA_DRIVER_CAPABILITIES": "compute,utility",
+    "CUDA_VISIBLE_DEVICES": "0",
     "SSH_AUTH_SOCK": "/ssh-agent"
   },
   "remoteUser": "vscode",
