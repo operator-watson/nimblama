@@ -12,6 +12,7 @@
   "mounts": [
     "source=${localWorkspaceFolder}/src,target=/workspaces/nimblama/src,type=bind,consistency=cached",
     "source=${localWorkspaceFolder}/models,target=/workspaces/nimblama/models,type=bind,consistency=cached",
+    "source=${localWorkspaceFolder}/chat_logs,target=/workspaces/nimblama/chat_logs,type=bind,consistency=cached",
     "source=${env:HOME}/.ccache,target=/home/vscode/.ccache,type=bind",
     "source=${env:SSH_AUTH_SOCK},target=/ssh-agent,type=bind"
   ],

@@ -4,7 +4,7 @@
 int main(int argc, char **argv)
 {
   // Create chat application instance
-  LlamaWrapper lw("models/Qwen3-4B-Thinking-2507-Q8_0.gguf");
+  LlamaWrapper lw("models/l3.1-dark-reasoning-lewdplay-evo-hermes-r1-uncensored-8b-q4_k_m.gguf");
 
   // Optional: customize configuration
   SamplingConfig samplingConfig;
@@ -13,12 +13,14 @@ int main(int argc, char **argv)
   samplingConfig.topK = 80;
   lw.setSamplingConfig(samplingConfig);
 
-  ModelConfig modelConfig("models/Qwen3-4B-Thinking-2507-Q8_0.gguf");
-  modelConfig.systemMessagePath = "";
+  ModelConfig modelConfig("models/l3.1-dark-reasoning-lewdplay-evo-hermes-r1-uncensored-8b-q4_k_m.gguf");
+  modelConfig.systemMessagePath = "system_message.txt";
   modelConfig.nGpuLayers = 80;
   modelConfig.nCtx = 12288;
   modelConfig.nBatch = 2048;
   lw.setModelConfig(modelConfig);
+
+  lw.enableChatLogging(true, "chat_logs");
 
   // Initialize everything
   if (!lw.initialize())

@@ -3,8 +3,10 @@
 #include <cstdio>
 #include <cstring>
 #include <iostream>
-#include <fstream>
 #include <sstream>
+#include <ctime>
+#include <iomanip>
+#include <filesystem>
 
 // ModelConfig implementation
 ModelConfig::ModelConfig(const std::string &path) : modelPath(path)
@@ -58,6 +60,11 @@ bool LlamaWrapper::initialize()
     return false;
 
   isInitialized = true;
+
+  if (loggingEnabled) {
+        createLogFile();
+    }
+
   return true;
 }
 
@@ -100,6 +107,8 @@ std::string LlamaWrapper::processUserMessage(const std::string &userMessage)
 
   messageHistory.push_back({"user", strdup(userMessage.c_str())});
 
+  writeToLog("user", userMessage);
+
   std::string prompt = buildPromptFromHistory();
   if (prompt.empty())
   {
@@ -111,6 +120,8 @@ std::string LlamaWrapper::processUserMessage(const std::string &userMessage)
   printf("\n\033[0m");
 
   messageHistory.push_back({"assistant", strdup(response.c_str())});
+
+  writeToLog("assistant", response);
 
   return response;
 }
@@ -250,6 +261,9 @@ bool LlamaWrapper::setupSystemMessage(const std::string &systemMessagePath)
     }
 
   messageHistory.push_back({"system", strdup(systemMessage.c_str())});
+
+  writeToLog("system", systemMessage);
+
   return true;
 }
 
@@ -380,6 +394,11 @@ void LlamaWrapper::cleanup()
     model = nullptr;
   }
 
+  if (logFile.is_open()) {
+        logFile.close();
+    }
+    currentLogPath.clear();
+
   isInitialized = false;
 }
 
@@ -414,6 +433,9 @@ bool LlamaWrapper::loadFileAsFirstMessage(const std::string &filePath)
   }
 
   messageHistory.push_back({"user", strdup(fileContent.c_str())});
+
+  writeToLog("user", fileContent);
+
   return true;
 }
 
@@ -435,6 +457,8 @@ std::string LlamaWrapper::loadFileAsFirstMessageWithResponse(const std::string &
   // Add the file content as first user message
   messageHistory.push_back({"user", strdup(fileContent.c_str())});
 
+  writeToLog("user", fileContent);
+
   // Build prompt and generate response
   std::string prompt = buildPromptFromHistory();
   if (prompt.empty())
@@ -448,6 +472,8 @@ std::string LlamaWrapper::loadFileAsFirstMessageWithResponse(const std::string &
 
   // Add response to history
   messageHistory.push_back({"assistant", strdup(response.c_str())});
+
+  writeToLog("assistant", response);
 
   return response;
 }
@@ -464,4 +490,79 @@ std::string LlamaWrapper::readSystemMessage(const std::string &filePath)
     std::stringstream buffer;
     buffer << file.rdbuf();
     return buffer.str();
+}
+
+// Enable/disable chat logging with optional directory
+void LlamaWrapper::enableChatLogging(bool enable, const std::string& directory)
+{
+    loggingEnabled = enable;
+    logDirectory = directory;
+    
+    if (enable && isInitialized) {
+        createLogFile();
+    } else if (!enable && logFile.is_open()) {
+        logFile.close();
+        currentLogPath.clear();
+    }
+}
+
+// Generate timestamp-based filename
+std::string LlamaWrapper::generateLogFilename()
+{
+    auto now = std::time(nullptr);
+    auto tm = *std::localtime(&now);
+    
+    std::stringstream filename;
+    filename << "chat_" 
+             << std::put_time(&tm, "%Y%m%d_%H%M%S")
+             << ".md";
+    
+    return filename.str();
+}
+
+// Create log file and write header
+bool LlamaWrapper::createLogFile()
+{
+    if (!loggingEnabled) return true;
+    
+    // Create directory if it doesn't exist
+    std::filesystem::create_directories(logDirectory);
+    
+    // Generate filename and full path
+    std::string filename = generateLogFilename();
+    currentLogPath = logDirectory + "/" + filename;
+    
+    // Open log file
+    logFile.open(currentLogPath);
+    if (!logFile.is_open()) {
+        std::cerr << "Warning: Could not create log file: " << currentLogPath << std::endl;
+        return false;
+    }
+    
+    // Write markdown header
+    auto now = std::time(nullptr);
+    auto tm = *std::localtime(&now);
+    
+    logFile << "# Chat Session - " 
+            << std::put_time(&tm, "%B %d, %Y %H:%M:%S") 
+            << "\n\n";
+    logFile.flush();
+    
+    return true;
+}
+
+// Write message to log file
+void LlamaWrapper::writeToLog(const std::string& role, const std::string& content)
+{
+    if (!loggingEnabled || !logFile.is_open()) return;
+    
+    if (role == "system") {
+        logFile << "## System Message\n\n" << content << "\n\n";
+    } else if (role == "user") {
+        logFile << "## User\n\n" << content << "\n\n";
+    } else if (role == "assistant") {
+        logFile << "## Assistant\n\n" << content << "\n\n";
+    }
+    
+    logFile.flush();
 }

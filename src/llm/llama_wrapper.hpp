@@ -4,6 +4,7 @@
 #include "llama.h"
 #include <string>
 #include <vector>
+#include <fstream>
 
 // Configuration structure for sampling parameters
 struct SamplingConfig
@@ -46,6 +47,11 @@ private:
 
   bool isInitialized;
 
+  bool loggingEnabled = false;
+  std::string logDirectory = "chat_logs";
+  std::ofstream logFile;
+  std::string currentLogPath;
+
 public:
   explicit LlamaWrapper(const std::string &modelPath);
   ~LlamaWrapper();
@@ -53,6 +59,9 @@ public:
   // Configuration methods
   void setSamplingConfig(const SamplingConfig &config);
   void setModelConfig(const ModelConfig &config);
+
+  void enableChatLogging(bool enable = true, const std::string& directory = "chat_logs");
+  std::string getCurrentLogFilePath() const { return currentLogPath; }
 
   // Core functionality
   bool initialize();
@@ -87,4 +96,8 @@ private:
   // NEW: File reading helper
   std::string readFileContents(const std::string &filePath);
   std::string readSystemMessage(const std::string &filePath);
+
+  std::string generateLogFilename();
+  void writeToLog(const std::string& role, const std::string& content);
+  bool createLogFile();
 };
