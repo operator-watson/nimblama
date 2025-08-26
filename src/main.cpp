@@ -4,7 +4,7 @@
 int main(int argc, char **argv)
 {
   // Create chat application instance
-  LlamaWrapper lw("models/l3.1-dark-reasoning-lewdplay-evo-hermes-r1-uncensored-8b-q4_k_m.gguf");
+  LlamaWrapper lw("models/L3.1-DpHermes-Rsnng-8B-DarkIdol-Inst-1.2-Uncen-D_AU-Q4_k_m.gguf");
 
   // Optional: customize configuration
   SamplingConfig samplingConfig;
@@ -13,8 +13,8 @@ int main(int argc, char **argv)
   samplingConfig.topK = 80;
   lw.setSamplingConfig(samplingConfig);
 
-  ModelConfig modelConfig("models/l3.1-dark-reasoning-lewdplay-evo-hermes-r1-uncensored-8b-q4_k_m.gguf");
-  modelConfig.systemMessagePath = "system_message.txt";
+  ModelConfig modelConfig("models/L3.1-DpHermes-Rsnng-8B-DarkIdol-Inst-1.2-Uncen-D_AU-Q4_k_m.gguf");
+  modelConfig.systemMessagePath = "";
   modelConfig.nGpuLayers = 100;
   modelConfig.nCtx = 16384;
   modelConfig.nBatch = 4096;
