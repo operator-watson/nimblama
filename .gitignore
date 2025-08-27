@@ -41,3 +41,6 @@ models/
 
 # Chat logs storage
 chat_logs/
+
+#Personal prompts
+*_prompt.txt
